@@ -76,8 +76,8 @@
     },
     "dependencies": [
         {
-            "app": "example.com/reduce-worker-base",
-            "imageID": "sha512-...",
+            "name": "example.com/reduce-worker-base",
+            "id": "sha512-...",
             "labels": [
                 {
                     "name": "os",

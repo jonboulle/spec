@@ -24,12 +24,12 @@ type ACIRegistry interface {
 
 // An ACIProvider provides functions to get an ACI contents, to convert an
 // ACI hash to the key under which the ACI is known to the provider and to resolve an
-// ImageID to the key under which it's known to the provider.
+// image ID to the key under which it's known to the provider.
 type ACIProvider interface {
 	// Read the ACI contents stream given the key. Use ResolveKey to
-	// convert an ImageID to the relative provider's key.
+	// convert an image ID to the relative provider's key.
 	ReadStream(key string) (io.ReadCloser, error)
-	// Converts an ImageID to the, if existent, key under which the
+	// Converts an image ID to the, if existent, key under which the
 	// ACI is known to the provider
 	ResolveKey(key string) (string, error)
 	// Converts a Hash to the provider's key
@@ -61,11 +61,11 @@ type ACIFiles struct {
 // RenderedACI is an (ordered) slice of ACIFiles
 type RenderedACI []*ACIFiles
 
-// GetRenderedACIWithImageID, given an imageID, starts with the matching image
+// GetRenderedACIWithImageID, given an image ID, starts with the matching image
 // available in the store, creates the dependencies list and returns the
 // RenderedACI list.
-func GetRenderedACIWithImageID(imageID types.Hash, ap ACIRegistry) (RenderedACI, error) {
-	imgs, err := CreateDepListFromImageID(imageID, ap)
+func GetRenderedACIWithImageID(id types.Hash, ap ACIRegistry) (RenderedACI, error) {
+	imgs, err := CreateDepListFromImageID(id, ap)
 	if err != nil {
 		return nil, err
 	}
