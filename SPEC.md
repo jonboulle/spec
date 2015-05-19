@@ -705,8 +705,8 @@ JSON Schema for the Image Manifest (app image manifest, ACI manifest), conformin
     },
     "dependencies": [
         {
-            "name": "example.com/reduce-worker-base",
-            "id": "sha512-...",
+            "imageName": "example.com/reduce-worker-base",
+            "imageID": "sha512-...",
             "labels": [
                 {
                     "name": "os",
@@ -767,8 +767,8 @@ JSON Schema for the Image Manifest (app image manifest, ACI manifest), conformin
         * **count** (integer, optional, defaults to 1) specifies a range of ports, starting with "port" and ending with "port" + "count" - 1.
         * **socketActivated** (boolean, optional, defaults to "false" if unsupplied) if set to true, the application expects to be [socket activated](http://www.freedesktop.org/software/systemd/man/sd_listen_fds.html) on these ports. The ACE must pass file descriptors using the [socket activation protocol](http://www.freedesktop.org/software/systemd/man/sd_listen_fds.html) that are listening on these ports when starting this app. If multiple apps in the same pod are using socket activation then the ACE must match the sockets to the correct apps using getsockopt() and getsockname().
 * **dependencies** (list of objects, optional) dependent application images that need to be placed down into the rootfs before the files from this image (if any). The ordering is significant. See [Dependency Matching](#dependency-matching) for how dependencies are retrieved.
-    * **name** (string of type [AC Name](#ac-name-type), required) name of the dependent App Container Image.
-    * **id** (string of type [Image ID](#image-id-type), optional) content hash of the dependency. If provided, the retrieved dependency must match the hash. This can be used to produce deterministic, repeatable builds of an App Container Image that has dependencies.
+    * **imageName** (string of type [AC Name](#ac-name-type), required) name of the dependent App Container Image.
+    * **imageID** (string of type [Image ID](#image-id-type), optional) content hash of the dependency. If provided, the retrieved dependency must match the hash. This can be used to produce deterministic, repeatable builds of an App Container Image that has dependencies.
     * **labels** (list of objects, optional) a list of the very same form as the aforementioned label objects in the top level ImageManifest. See [Dependency Matching](#dependency-matching) for how these are used.
 * **pathWhitelist** (list of strings, optional) whitelist of absolute paths that will exist in the app's rootfs after rendering. This must be a complete and absolute set. An empty list is equivalent to an absent value and means that all files in this image and any dependencies will be available in the rootfs.
 * **annotations** (list of objects, optional) any extra metadata you wish to add to the image. Each object has two key-value pairs: the *name* is restricted to the [AC Name](#ac-name-type) formatting and *value* is an arbitrary string. Annotation names must be unique within the list. Annotations can be used by systems outside of the ACE (ACE can override). If you are defining new annotations, please consider submitting them to the specification. If you intend for your field to remain special to your application please be a good citizen and prefix an appropriate namespace to your key names. Recognized annotations include:
@@ -779,8 +779,8 @@ JSON Schema for the Image Manifest (app image manifest, ACI manifest), conformin
 
 #### Dependency Matching
 
-Dependency matching is based on a combination of the three different fields of the dependency - **name**, **id**, and **labels**.
-First, the image discovery mechanism is used to locate a dependency.
+Dependency matching is based on a combination of the three different fields of the dependency - **imageName**, **imageID**, and **labels**.
+First, the image discovery mechanism is used to locate a dependency based on the **imageName**.
 If any labels are specified in the dependency, they are passed to the image discovery mechanism, and will be used when locating the image.
 
 If the image discovery process successfully returns an image, it will be compared as follows.
@@ -790,8 +790,8 @@ A label is considered to match if it meets one of two criteria:
 - It is present in the dependency specification and present in the dependency's ImageManifest with the same value.
 - It is absent from the dependency specification and present in the dependency's ImageManifest, with any value.
 This facilitates "wildcard" matching and a variety of common usage patterns, like "noarch" or "latest" dependencies.
-For example, an AppImage containing a set of bash scripts might omit both "os" and "arch", and hence could be used as a dependency by a variety of different AppImages.
-Alternatively, an AppImage might specify a dependency with no image ID and no "version" label, and the image discovery mechanism could always retrieve the latest version of an AppImage
+For example, an ACI containing a set of bash scripts might omit both "os" and "arch", and hence could be used as a dependency by a variety of different ACIs.
+Alternatively, an ACI might specify a dependency with no image ID and no "version" label, and the image discovery mechanism could always retrieve the latest version of an ACI.
 
 ### Pod Manifest Schema
 

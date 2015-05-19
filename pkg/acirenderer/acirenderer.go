@@ -61,11 +61,11 @@ type ACIFiles struct {
 // RenderedACI is an (ordered) slice of ACIFiles
 type RenderedACI []*ACIFiles
 
-// GetRenderedACIWithImageID, given an image ID, starts with the matching image
+// GetRenderedACIWithImageID, given an imageID, starts with the matching image
 // available in the store, creates the dependencies list and returns the
 // RenderedACI list.
-func GetRenderedACIWithImageID(id types.Hash, ap ACIRegistry) (RenderedACI, error) {
-	imgs, err := CreateDepListFromImageID(id, ap)
+func GetRenderedACIWithImageID(imageID types.Hash, ap ACIRegistry) (RenderedACI, error) {
+	imgs, err := CreateDepListFromImageID(imageID, ap)
 	if err != nil {
 		return nil, err
 	}

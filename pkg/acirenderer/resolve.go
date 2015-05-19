@@ -7,9 +7,9 @@ import (
 )
 
 // CreateDepListFromImageID returns the flat dependency tree of the image with
-// the provided image ID
-func CreateDepListFromImageID(id types.Hash, ap ACIRegistry) (Images, error) {
-	key, err := ap.ResolveKey(id.String())
+// the provided imageID
+func CreateDepListFromImageID(imageID types.Hash, ap ACIRegistry) (Images, error) {
+	key, err := ap.ResolveKey(imageID.String())
 	if err != nil {
 		return nil, err
 	}
@@ -45,14 +45,14 @@ func createDepList(key string, ap ACIRegistry) (Images, error) {
 		for _, d := range dependencies {
 			var depimg Image
 			var depKey string
-			if d.ID != nil && !d.ID.Empty() {
-				depKey, err = ap.ResolveKey(d.ID.String())
+			if d.ImageID != nil && !d.ImageID.Empty() {
+				depKey, err = ap.ResolveKey(d.ImageID.String())
 				if err != nil {
 					return nil, err
 				}
 			} else {
 				var err error
-				depKey, err = ap.GetACI(d.Name, d.Labels)
+				depKey, err = ap.GetACI(d.ImageName, d.Labels)
 				if err != nil {
 					return nil, err
 				}

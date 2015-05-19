@@ -8,16 +8,16 @@ import (
 type Dependencies []Dependency
 
 type Dependency struct {
-	Name   ACName `json:"name"`
-	ID     *Hash  `json:"id,omitempty"`
-	Labels Labels `json:"labels,omitempty"`
+	ImageName ACName `json:"imageName"`
+	ImageID   *Hash  `json:"imageID,omitempty"`
+	Labels    Labels `json:"labels,omitempty"`
 }
 
 type dependency Dependency
 
 func (d Dependency) assertValid() error {
-	if len(d.Name) < 1 {
-		return errors.New(`name cannot be empty`)
+	if len(d.ImageName) < 1 {
+		return errors.New(`imageName cannot be empty`)
 	}
 	return nil
 }

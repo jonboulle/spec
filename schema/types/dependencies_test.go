@@ -3,7 +3,7 @@ package types
 import "testing"
 
 func TestEmptyHash(t *testing.T) {
-	dj := `{"name": "example.com/reduce-worker-base"}`
+	dj := `{"imageName": "example.com/reduce-worker-base"}`
 
 	var d Dependency
 
