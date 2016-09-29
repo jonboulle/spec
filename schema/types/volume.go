@@ -27,6 +27,7 @@ import (
 )
 
 const (
+	// Defaults for empty and appData volumes
 	emptyVolumeDefaultMode = "0755"
 	emptyVolumeDefaultUID  = 0
 	emptyVolumeDefaultGID  = 0
@@ -72,6 +73,20 @@ func (v Volume) assertValid() error {
 			return errors.New("gid for empty volume must be set")
 		}
 		return nil
+	case "appData":
+		if v.Source != "" {
+			return errors.New("source for appData volume must be empty")
+		}
+		if v.Mode == nil {
+			return errors.New("mode for appData volume must be set")
+		}
+		if v.UID == nil {
+			return errors.New("uid for appData volume must be set")
+		}
+		if v.GID == nil {
+			return errors.New("gid for appData volume must be set")
+		}
+		return nil
 	case "host":
 		if v.Source == "" {
 			return errors.New("source for host volume cannot be empty")
@@ -90,7 +105,7 @@ func (v Volume) assertValid() error {
 		}
 		return nil
 	default:
-		return errors.New(`unrecognized volume kind: should be one of "empty", "host"`)
+		return errors.New(`unrecognized volume kind: should be one of "empty", "appData", "host"`)
 	}
 }
 
@@ -134,7 +149,7 @@ func (v Volume) String() string {
 		s = append(s, strconv.FormatBool(*v.Recursive))
 	}
 	switch v.Kind {
-	case "empty":
+	case "empty", "appData":
 		if *v.Mode != emptyVolumeDefaultMode {
 			s = append(s, ",mode=")
 			s = append(s, *v.Mode)
@@ -232,7 +247,7 @@ func VolumeFromParams(params map[string][]string) (*Volume, error) {
 // Volume if they are not already been set. These fields are not
 // pre-populated on all Volumes as the Volume type is polymorphic.
 func maybeSetDefaults(vol *Volume) {
-	if vol.Kind == "empty" {
+	if vol.Kind == "empty" || vol.Kind == "appData" {
 		if vol.Mode == nil {
 			m := emptyVolumeDefaultMode
 			vol.Mode = &m

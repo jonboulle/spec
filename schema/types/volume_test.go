@@ -128,6 +128,61 @@ func TestVolumeToFromString(t *testing.T) {
 			},
 		},
 		{
+			"foobar,kind=appData",
+			Volume{
+				Name:     "foobar",
+				Kind:     "appData",
+				ReadOnly: nil,
+				Mode:     sp(emptyVolumeDefaultMode),
+				UID:      ip(emptyVolumeDefaultUID),
+				GID:      ip(emptyVolumeDefaultGID),
+			},
+		},
+		{
+			"foobar,kind=appData,readOnly=true",
+			Volume{
+				Name:     "foobar",
+				Kind:     "appData",
+				ReadOnly: bp(true),
+				Mode:     sp(emptyVolumeDefaultMode),
+				UID:      ip(emptyVolumeDefaultUID),
+				GID:      ip(emptyVolumeDefaultGID),
+			},
+		},
+		{
+			"foobar,kind=appData,readOnly=true,mode=0777",
+			Volume{
+				Name:     "foobar",
+				Kind:     "appData",
+				ReadOnly: bp(true),
+				Mode:     sp("0777"),
+				UID:      ip(emptyVolumeDefaultUID),
+				GID:      ip(emptyVolumeDefaultGID),
+			},
+		},
+		{
+			"foobar,kind=appData,mode=0777,uid=1000",
+			Volume{
+				Name:     "foobar",
+				Kind:     "appData",
+				ReadOnly: nil,
+				Mode:     sp("0777"),
+				UID:      ip(1000),
+				GID:      ip(emptyVolumeDefaultGID),
+			},
+		},
+		{
+			"foobar,kind=appData,mode=0777,uid=1000,gid=1000",
+			Volume{
+				Name:     "foobar",
+				Kind:     "appData",
+				ReadOnly: nil,
+				Mode:     sp("0777"),
+				UID:      ip(1000),
+				GID:      ip(1000),
+			},
+		},
+		{
 			"foobar,kind=host,source=/tmp,recursive=false",
 			Volume{
 				Name:      "foobar",

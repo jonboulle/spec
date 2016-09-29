@@ -176,6 +176,7 @@ JSON Schema for the Pod Manifest, conforming to [RFC4627](https://tools.ietf.org
     * **readOnly** (boolean, optional, defaults to "false" if unsupplied) whether or not the volume will be mounted read only.
     * **kind** (string, required) either:
         * **empty** - creates an empty directory on the host and bind mounts it into the container. All containers in the pod share the mount, and the lifetime of the volume is equal to the lifetime of the pod (i.e. the directory on the host machine is removed when the pod's filesystem is garbage collected)
+        * **appData** - similar to **empty**, but the created directory may be prepopulated: if the app's rendered filesystem contains data at the associated mount point, that existing data is copied into the new directory. This is semantically equivalent to how [Docker _data volumes_ are initialized](https://docs.docker.com/engine/tutorials/dockervolumes/#/data-volumes).
         * **host** - fulfills a mount point with a bind mount from a **source** directory on the host.
     * **source** (string, required if **kind** is "host") absolute path on host to be bind mounted under a mount point in each app's chroot.
     * **recursive** (boolean, optional, only interpreted if **kind** is "host") whether or not the volume will be mounted [recursively](http://lwn.net/Articles/690679/). When **recursive** is not specified, the executor SHOULD default to recursive.
